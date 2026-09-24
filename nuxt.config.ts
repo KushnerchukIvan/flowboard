@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  runtimeConfig: { jwtSecret: process.env.JWT_SECRET || '' },
+  runtimeConfig: { jwtSecret: process.env.NUXT_JWT_SECRET || process.env.JWT_SECRET || '' },
   css: ['~/assets/scss/_tokens.scss', '~/assets/css/main.css'],
   vite: {
     css: {

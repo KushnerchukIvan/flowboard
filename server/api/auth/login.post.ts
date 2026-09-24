@@ -1,6 +1,7 @@
-import { findUser, issueSession, passwordMatches } from '../../utils/auth'
+import { assertAuthConfigured, findUser, issueSession, passwordMatches } from '../../utils/auth'
 
 export default defineEventHandler(async (event) => {
+  assertAuthConfigured(event)
   const body = await readBody<{ email?: string; password?: string }>(event)
   const email = body.email?.trim().toLowerCase()
   const user = email ? await findUser(email) : undefined

@@ -42,10 +42,13 @@ export async function saveUser(user: UserRecord) {
 
 function secret(event: H3Event) {
   const config = useRuntimeConfig(event)
-  if (config.jwtSecret) return String(config.jwtSecret)
+  const value = String(config.jwtSecret || process.env.NUXT_JWT_SECRET || process.env.JWT_SECRET || '').trim()
+  if (value) return value
   if (process.env.NODE_ENV === 'production') throw createError({ statusCode: 500, statusMessage: 'JWT_SECRET must be configured' })
   return 'flowboard-local-development-secret-change-before-deploying'
 }
+
+export function assertAuthConfigured(event: H3Event) { secret(event) }
 
 export function hashPassword(password: string, salt = randomBytes(16).toString('hex')) {
   return { salt, hash: scryptSync(password, salt, 64).toString('hex') }

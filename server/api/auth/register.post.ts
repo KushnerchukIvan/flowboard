@@ -1,7 +1,10 @@
 import { randomUUID } from 'node:crypto'
-import { hashPassword, issueSession, saveUser } from '../../utils/auth'
+import { assertAuthConfigured, hashPassword, issueSession, saveUser } from '../../utils/auth'
 
 export default defineEventHandler(async (event) => {
+  // Fail before saving the account so a missing production secret cannot leave
+  // a registered user who cannot receive a session.
+  assertAuthConfigured(event)
   const body = await readBody<{ name?: string; email?: string; password?: string }>(event)
   const name = body.name?.trim()
   const email = body.email?.trim().toLowerCase()
