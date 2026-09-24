@@ -1,183 +1,289 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from "@playwright/test";
 
-test('registration, dashboard actions, project details, tasks, dialogs, search and persistent login', async ({ page }) => {
-  const email = `flowboard-${Date.now()}@example.com`
-  const projectName = 'Playwright demo project'
-  await page.setViewportSize({ width: 1440, height: 1000 })
-  const pageErrors: string[] = []
-  page.on('pageerror', (error) => pageErrors.push(error.message))
+test("registration, dashboard actions, project details, tasks, dialogs, search and persistent login", async ({
+  page,
+}) => {
+  const email = `flowboard-${Date.now()}@example.com`;
+  const projectName = "Playwright demo project";
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
 
-  await page.goto('/')
-  await expect(page).toHaveURL(/\/auth$/)
-  await page.getByRole('button', { name: 'Зареєструватися' }).click()
-  await page.getByLabel('Ваше ім’я').fill('Playwright User')
-  await page.getByLabel('Електронна пошта').fill(email)
-  await page.getByLabel('Пароль').fill('Secure-demo-123')
-  await page.getByRole('button', { name: 'Створити акаунт' }).click()
-  await expect(page).toHaveURL('/')
-  await expect(page.getByRole('heading', { name: 'Доброго ранку, Playwright User' })).toBeVisible()
-  const activityChart = page.getByLabel('Період активності')
-  await expect(page.locator('.chart-bar')).toHaveCount(30)
-  await page.locator('.chart-bar').first().hover()
-  await expect(page.locator('.chart-tooltip')).toContainText('завершених завдань')
-  await activityChart.selectOption({ label: 'Останні 7 днів' })
-  await expect(page.locator('.chart-bar')).toHaveCount(7)
-  await page.locator('.chart-bar').nth(2).focus()
-  await expect(page.locator('.chart-tooltip')).toBeVisible()
-  await activityChart.selectOption({ label: 'Цей квартал' })
-  await expect(page.locator('.chart-bar')).toHaveCount(90)
-  await activityChart.selectOption({ label: 'Останні 30 днів' })
-  await expect(page.locator('.chart-bar')).toHaveCount(30)
-  await page.getByRole('link', { name: /Мої завдання/ }).click()
-  await expect(page).toHaveURL(/\/tasks$/)
-  await page.getByRole('link', { name: /Огляд/ }).click()
-  await expect(page).toHaveURL('/')
-  await page.getByRole('button', { name: 'Позначити виконаним' }).first().click()
-  await expect(page.getByRole('button', { name: 'Повернути завдання' }).first()).toBeVisible()
-  await page.getByRole('button', { name: 'Повернути завдання' }).first().click()
-  await expect(page.getByRole('button', { name: 'Позначити виконаним' }).first()).toBeVisible()
+  await page.goto("/");
+  await expect(page).toHaveURL(/\/auth$/);
+  await page.getByRole("button", { name: "Зареєструватися" }).click();
+  await page.getByLabel("Ваше ім’я").fill("Playwright User");
+  await page.getByLabel("Електронна пошта").fill(email);
+  await page.getByLabel("Пароль").fill("Secure-demo-123");
+  await page.getByRole("button", { name: "Створити акаунт" }).click();
+  await expect(page).toHaveURL("/");
+  await expect(
+    page.getByRole("heading", { name: "Доброго ранку, Playwright User" }),
+  ).toBeVisible();
+  const activityChart = page.getByLabel("Період активності");
+  await expect(page.locator(".chart-bar")).toHaveCount(30);
+  await page.locator(".chart-bar").first().hover();
+  await expect(page.locator(".chart-tooltip")).toContainText(
+    "завершених завдань",
+  );
+  await activityChart.selectOption({ label: "Останні 7 днів" });
+  await expect(page.locator(".chart-bar")).toHaveCount(7);
+  await page.locator(".chart-bar").nth(2).focus();
+  await expect(page.locator(".chart-tooltip")).toBeVisible();
+  await activityChart.selectOption({ label: "Цей квартал" });
+  await expect(page.locator(".chart-bar")).toHaveCount(90);
+  await activityChart.selectOption({ label: "Останні 30 днів" });
+  await expect(page.locator(".chart-bar")).toHaveCount(30);
+  await page.getByRole("link", { name: /Мої завдання/ }).click();
+  await expect(page).toHaveURL(/\/tasks$/);
+  await page.getByRole("link", { name: /Огляд/ }).click();
+  await expect(page).toHaveURL("/");
+  await page
+    .getByRole("button", { name: "Позначити виконаним" })
+    .first()
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Повернути завдання" }).first(),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Повернути завдання" })
+    .first()
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Позначити виконаним" }).first(),
+  ).toBeVisible();
 
-  await page.getByRole('button', { name: 'Сповіщення' }).click()
-  await expect(page.getByRole('dialog', { name: 'Сповіщення' })).toBeVisible()
-  await page.getByRole('button', { name: 'Позначити все прочитаним' }).click()
-  await expect(page.getByText('Усі сповіщення позначено прочитаними')).toBeVisible()
-  await page.getByRole('button', { name: 'Переглянути плани' }).click()
-  await expect(page.getByRole('dialog', { name: 'Плани Flowboard' })).toBeVisible()
-  await page.getByRole('button', { name: 'Обрати Team' }).click()
-  await expect(page.getByText('Дякуємо за інтерес до Flowboard!')).toBeVisible()
+  await page.getByRole("button", { name: "Сповіщення" }).click();
+  await expect(page.getByRole("dialog", { name: "Сповіщення" })).toBeVisible();
+  await page.getByRole("button", { name: "Позначити все прочитаним" }).click();
+  await expect(
+    page.getByText("Усі сповіщення позначено прочитаними"),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Переглянути плани" }).click();
+  await expect(
+    page.getByRole("dialog", { name: "Плани Flowboard" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Обрати Team" }).click();
+  await expect(
+    page.getByText("Дякуємо за інтерес до Flowboard!"),
+  ).toBeVisible();
 
-  await page.getByRole('button', { name: 'Запросити', exact: false }).click()
-  await page.getByLabel('Email учасника').fill('invalid-email')
-  await page.getByRole('button', { name: 'Надіслати запрошення' }).click()
-  await expect(page.getByLabel('Email учасника')).toBeVisible()
-  await page.getByLabel('Email учасника').fill('teammate@example.com')
-  await page.getByLabel('Роль').selectOption('Гість')
-  await page.getByRole('button', { name: 'Надіслати запрошення' }).click()
-  await expect(page.getByText('Запрошення надіслано на teammate@example.com')).toBeVisible()
+  await page.getByRole("button", { name: "Запросити", exact: false }).click();
+  await page.getByLabel("Email учасника").fill("invalid-email");
+  await page.getByRole("button", { name: "Надіслати запрошення" }).click();
+  await expect(page.getByLabel("Email учасника")).toBeVisible();
+  await page.getByLabel("Email учасника").fill("teammate@example.com");
+  await page.getByLabel("Роль").selectOption("Гість");
+  await page.getByRole("button", { name: "Надіслати запрошення" }).click();
+  await expect(
+    page.getByText("Запрошення надіслано на teammate@example.com"),
+  ).toBeVisible();
 
-  await page.getByRole('button', { name: 'Playwright User' }).click()
-  await expect(page.getByRole('dialog', { name: 'Ваш профіль' })).toBeVisible()
-  await page.getByRole('link', { name: 'Відкрити налаштування' }).click()
-  await expect(page).toHaveURL(/\/settings$/)
+  await page.getByRole("button", { name: "Playwright User" }).click();
+  await expect(page.getByRole("dialog", { name: "Ваш профіль" })).toBeVisible();
+  await page.getByRole("link", { name: "Відкрити налаштування" }).click();
+  await expect(page).toHaveURL(/\/settings$/);
 
-  await page.goto('/projects')
-  await page.getByRole('button', { name: 'Додати проєкт' }).click()
-  await page.getByRole('button', { name: 'Скасувати' }).click()
-  await page.getByRole('main').getByRole('link', { name: 'Мобільний банкінг' }).click()
-  await expect(page.getByRole('heading', { name: 'Мобільний банкінг' })).toBeVisible()
-  await page.getByRole('link', { name: 'Усі проєкти' }).click()
-  await page.getByRole('button', { name: 'Створити проєкт' }).click()
-  await page.getByLabel('Назва проєкту').fill(projectName)
-  await page.getByLabel('Клієнт або команда').fill('QA Studio')
-  await page.getByRole('dialog').getByRole('button', { name: 'Створити проєкт', exact: true }).click()
-  await expect(page.getByRole('main').getByRole('link', { name: projectName })).toBeVisible()
-  await page.getByRole('main').getByRole('link', { name: projectName }).click()
-  await expect(page).toHaveURL(/\/projects\/p\d+/)
-  await expect(page.getByRole('heading', { name: projectName })).toBeVisible()
-  await page.getByRole('link', { name: 'Усі проєкти' }).click()
+  await page.goto("/projects");
+  await page.getByRole("button", { name: "Додати проєкт" }).click();
+  await page.getByRole("button", { name: "Скасувати" }).click();
+  await page
+    .getByRole("main")
+    .getByRole("link", { name: "Мобільний банкінг" })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Мобільний банкінг" }),
+  ).toBeVisible();
+  await page.getByRole("link", { name: "Усі проєкти" }).click();
+  await page.getByRole("button", { name: "Створити проєкт" }).click();
+  await page.getByLabel("Назва проєкту").fill(projectName);
+  await page.getByLabel("Клієнт або команда").fill("QA Studio");
+  await page
+    .getByRole("dialog")
+    .getByRole("button", { name: "Створити проєкт", exact: true })
+    .click();
+  await expect(
+    page.getByRole("main").getByRole("link", { name: projectName }),
+  ).toBeVisible();
+  await page.getByRole("main").getByRole("link", { name: projectName }).click();
+  await expect(page).toHaveURL(/\/projects\/p\d+/);
+  await expect(page.getByRole("heading", { name: projectName })).toBeVisible();
+  await page.getByRole("link", { name: "Усі проєкти" }).click();
 
-  await page.locator('.project-card').filter({ hasText: projectName }).getByRole('button', { name: 'Керування проєктом' }).click()
-  await page.getByRole('button', { name: 'Відкрити проєкт' }).click()
-  await expect(page).toHaveURL(/\/projects\/p\d+/)
-  await page.goBack()
-  await page.locator('.project-card').filter({ hasText: projectName }).getByRole('button', { name: 'Керування проєктом' }).click()
-  await page.getByRole('button', { name: 'Видалити проєкт' }).click()
-  await expect(page.getByRole('main').getByRole('link', { name: projectName })).toHaveCount(0)
+  await page
+    .locator(".project-card")
+    .filter({ hasText: projectName })
+    .getByRole("button", { name: "Керування проєктом" })
+    .click();
+  await page.getByRole("button", { name: "Відкрити проєкт" }).click();
+  await expect(page).toHaveURL(/\/projects\/p\d+/);
+  await page.goBack();
+  await page
+    .locator(".project-card")
+    .filter({ hasText: projectName })
+    .getByRole("button", { name: "Керування проєктом" })
+    .click();
+  await page.getByRole("button", { name: "Видалити проєкт" }).click();
+  await expect(
+    page.getByRole("main").getByRole("link", { name: projectName }),
+  ).toHaveCount(0);
 
-  await page.goto('/tasks')
-  await page.getByRole('button', { name: '＋ Додати завдання' }).first().click()
-  await expect(page.getByRole('heading', { name: 'Нове завдання' }).first()).toBeVisible()
-  await page.getByLabel('Назва нового завдання').fill('Custom task from form')
-  await page.getByRole('button', { name: '＋ Додати', exact: true }).click()
-  await expect(page.getByRole('heading', { name: 'Custom task from form' })).toBeVisible()
+  await page.goto("/tasks");
+  await page
+    .getByRole("button", { name: "＋ Додати завдання" })
+    .first()
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Нове завдання" }).first(),
+  ).toBeVisible();
+  await page.getByLabel("Назва нового завдання").fill("Custom task from form");
+  await page.getByRole("button", { name: "＋ Додати", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Custom task from form" }),
+  ).toBeVisible();
 
-  const draggable = page.locator('.task-card').filter({ has: page.getByRole('heading', { name: 'Custom task from form' }) })
-  await draggable.dragTo(page.locator('.board-column').nth(1))
-  await expect(page.locator('.board-column').nth(1).getByRole('heading', { name: 'Custom task from form' })).toBeVisible()
-  await page.getByRole('button', { name: 'Видалити завдання Custom task from form' }).click()
-  await expect(page.getByRole('heading', { name: 'Custom task from form' })).toHaveCount(0)
+  const draggable = page.locator(".task-card").filter({
+    has: page.getByRole("heading", { name: "Custom task from form" }),
+  });
+  await draggable.dragTo(page.locator(".board-column").nth(1));
+  await expect(
+    page
+      .locator(".board-column")
+      .nth(1)
+      .getByRole("heading", { name: "Custom task from form" }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Видалити завдання Custom task from form" })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Custom task from form" }),
+  ).toHaveCount(0);
 
-  const reminderTask = page.locator('.task-card').filter({ hasText: 'Підготувати сценарії онбордингу' })
-  await reminderTask.getByRole('combobox', { name: 'Статус завдання' }).selectOption('done')
-  await expect(page.locator('.board-column').nth(2).getByRole('heading', { name: 'Підготувати сценарії онбордингу' })).toBeVisible()
-  await page.getByRole('button', { name: 'Дії з колонкою' }).first().click()
-  await page.getByRole('button', { name: 'Перейти до завдань' }).click()
-  await expect(page).toHaveURL(/\/tasks$/)
-  await page.getByRole('button', { name: 'Дії з колонкою' }).nth(1).click()
-  await page.getByRole('button', { name: '＋ Нове завдання' }).click()
-  await expect(page.getByRole('heading', { name: 'Нове завдання' }).first()).toBeVisible()
-  await expect(page.getByRole('heading', { name: 'Нове завдання' })).toHaveCount(2)
-  await page.getByRole('button', { name: 'Видалити завдання Нове завдання' }).last().click()
+  const reminderTask = page
+    .locator(".task-card")
+    .filter({ hasText: "Підготувати сценарії онбордингу" });
+  await reminderTask
+    .getByRole("combobox", { name: "Статус завдання" })
+    .selectOption("done");
+  await expect(
+    page
+      .locator(".board-column")
+      .nth(2)
+      .getByRole("heading", { name: "Підготувати сценарії онбордингу" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Дії з колонкою" }).first().click();
+  await page.getByRole("button", { name: "Перейти до завдань" }).click();
+  await expect(page).toHaveURL(/\/tasks$/);
+  await page.getByRole("button", { name: "Дії з колонкою" }).nth(1).click();
+  await page.getByRole("button", { name: "＋ Нове завдання" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Нове завдання" }).first(),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Нове завдання" }),
+  ).toHaveCount(2);
+  await page
+    .getByRole("button", { name: "Видалити завдання Нове завдання" })
+    .last()
+    .click();
 
-  await page.getByRole('link', { name: 'Команда' }).click()
-  await page.getByRole('button', { name: 'Переглянути профіль' }).first().click()
-  await expect(page.getByRole('dialog', { name: 'Учасник команди' })).toBeVisible()
-  await page.getByRole('link', { name: 'Переглянути команду' }).click()
-  await page.getByRole('button', { name: '＋ Запросити учасника' }).click()
-  await expect(page.getByRole('dialog', { name: 'Запросити до команди' })).toBeVisible()
-  await page.getByRole('button', { name: 'Закрити' }).click()
+  await page.getByRole("link", { name: "Команда" }).click();
+  await page
+    .getByRole("button", { name: "Переглянути профіль" })
+    .first()
+    .click();
+  await expect(
+    page.getByRole("dialog", { name: "Учасник команди" }),
+  ).toBeVisible();
+  await page.getByRole("link", { name: "Переглянути команду" }).click();
+  await page.getByRole("button", { name: "＋ Запросити учасника" }).click();
+  await expect(
+    page.getByRole("dialog", { name: "Запросити до команди" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Закрити" }).click();
 
-  await page.getByRole('button', { name: /Пошук/ }).click()
-  await expect(page).toHaveURL(/\/search$/)
-  await page.getByPlaceholder('Назва проєкту або клієнт…').fill('Northstar')
-  await expect(page.getByRole('heading', { name: 'Мобільний банкінг' })).toBeVisible()
-  await page.getByPlaceholder('Назва проєкту або клієнт…').fill('nothing-matches')
-  await expect(page.getByText('Проєктів не знайдено. Спробуйте інший запит.')).toBeVisible()
+  await page.getByRole("button", { name: /Пошук/ }).click();
+  await expect(page).toHaveURL(/\/search$/);
+  await page.getByPlaceholder("Назва проєкту або клієнт…").fill("Northstar");
+  await expect(
+    page.getByRole("heading", { name: "Мобільний банкінг" }),
+  ).toBeVisible();
+  await page
+    .getByPlaceholder("Назва проєкту або клієнт…")
+    .fill("nothing-matches");
+  await expect(
+    page.getByText("Проєктів не знайдено. Спробуйте інший запит."),
+  ).toBeVisible();
 
-  await page.getByRole('link', { name: 'Налаштування' }).click()
-  await page.getByRole('button', { name: 'Вийти з акаунта' }).click()
-  await expect(page).toHaveURL(/\/auth$/)
-  await page.getByLabel('Електронна пошта').fill(email)
-  await page.getByLabel('Пароль').fill('Secure-demo-123')
-  await page.getByRole('button', { name: /Увійти/ }).click()
-  await expect(page).toHaveURL('/')
-  await page.reload()
-  await expect(page).toHaveURL('/')
-  await expect(page.getByRole('heading', { name: 'Доброго ранку, Playwright User' })).toBeVisible()
-  expect(pageErrors).toEqual([])
-})
+  await page.getByRole("link", { name: "Налаштування" }).click();
+  await page.getByRole("button", { name: "Вийти з акаунта" }).click();
+  await expect(page).toHaveURL(/\/auth$/);
+  await page.getByLabel("Електронна пошта").fill(email);
+  await page.getByLabel("Пароль").fill("Secure-demo-123");
+  await page.getByRole("button", { name: /Увійти/ }).click();
+  await expect(page).toHaveURL("/");
+  await page.reload();
+  await expect(page).toHaveURL("/");
+  await expect(
+    page.getByRole("heading", { name: "Доброго ранку, Playwright User" }),
+  ).toBeVisible();
+  expect(pageErrors).toEqual([]);
+});
 
-test('invalid login, duplicate registration and protected route redirect', async ({ page }) => {
-  const email = `flowboard-negative-${Date.now()}@example.com`
-  await page.goto('/tasks')
-  await expect(page).toHaveURL(/\/auth$/)
+test("invalid login, duplicate registration and protected route redirect", async ({
+  page,
+}) => {
+  const email = `flowboard-negative-${Date.now()}@example.com`;
+  await page.goto("/tasks");
+  await expect(page).toHaveURL(/\/auth$/);
 
-  await page.getByLabel('Електронна пошта').fill('missing@example.com')
-  await page.getByLabel('Пароль').fill('wrong-password')
-  await page.getByRole('button', { name: /Увійти/ }).click()
-  await expect(page.locator('.auth-error')).toContainText('Неправильна пошта або пароль')
+  await page.getByLabel("Електронна пошта").fill("missing@example.com");
+  await page.getByLabel("Пароль").fill("wrong-password");
+  await page.getByRole("button", { name: /Увійти/ }).click();
+  await expect(page.locator(".auth-error")).toContainText(
+    "Неправильна пошта або пароль",
+  );
 
-  await page.getByRole('button', { name: 'Зареєструватися' }).click()
-  await page.getByLabel('Ваше ім’я').fill('Negative Test')
-  await page.getByLabel('Електронна пошта').fill(email)
-  await page.getByLabel('Пароль').fill('Secure-demo-456')
-  await page.getByRole('button', { name: 'Створити акаунт' }).click()
-  await expect(page).toHaveURL('/')
-  await page.getByRole('button', { name: 'Negative Test' }).click()
-  await page.getByRole('button', { name: 'Вийти з акаунта' }).click()
-  await page.getByRole('button', { name: 'Зареєструватися' }).click()
-  await page.getByLabel('Ваше ім’я').fill('Negative Test')
-  await page.getByLabel('Електронна пошта').fill(email)
-  await page.getByLabel('Пароль').fill('Secure-demo-456')
-  await page.getByRole('button', { name: 'Створити акаунт' }).click()
-  await expect(page.locator('.auth-error')).toContainText('вже існує')
-})
+  await page.getByRole("button", { name: "Зареєструватися" }).click();
+  await page.getByLabel("Ваше ім’я").fill("Negative Test");
+  await page.getByLabel("Електронна пошта").fill(email);
+  await page.getByLabel("Пароль").fill("Secure-demo-456");
+  await page.getByRole("button", { name: "Створити акаунт" }).click();
+  await expect(page).toHaveURL("/");
+  await page.getByRole("button", { name: "Negative Test" }).click();
+  await page.getByRole("button", { name: "Вийти з акаунта" }).click();
+  await page.getByRole("button", { name: "Зареєструватися" }).click();
+  await page.getByLabel("Ваше ім’я").fill("Negative Test");
+  await page.getByLabel("Електронна пошта").fill(email);
+  await page.getByLabel("Пароль").fill("Secure-demo-456");
+  await page.getByRole("button", { name: "Створити акаунт" }).click();
+  await expect(page.locator(".auth-error")).toContainText("вже існує");
+});
 
-test('mobile task board stacks columns and quick-add remains usable', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto('/auth?mode=register')
-  await page.getByLabel('Ваше ім’я').fill('Mobile Test')
-  await page.getByLabel('Електронна пошта').fill(`flowboard-mobile-${Date.now()}@example.com`)
-  await page.getByLabel('Пароль').fill('Secure-mobile-123')
-  await page.getByRole('button', { name: 'Створити акаунт' }).click()
-  await page.locator('a[href="/tasks"]').click()
-  const columns = page.locator('.board-column')
-  await expect(columns).toHaveCount(3)
-  const first = await columns.nth(0).boundingBox()
-  const second = await columns.nth(1).boundingBox()
-  expect(first).not.toBeNull()
-  expect(second).not.toBeNull()
-  expect(second!.y).toBeGreaterThan(first!.y)
-  await columns.nth(0).getByRole('button', { name: '＋ Додати завдання' }).click()
-  await expect(columns.nth(0).getByRole('heading', { name: 'Нове завдання' })).toBeVisible()
-})
+test("mobile task board stacks columns and quick-add remains usable", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/auth?mode=register");
+  await page.getByLabel("Ваше ім’я").fill("Mobile Test");
+  await page
+    .getByLabel("Електронна пошта")
+    .fill(`flowboard-mobile-${Date.now()}@example.com`);
+  await page.getByLabel("Пароль").fill("Secure-mobile-123");
+  await page.getByRole("button", { name: "Створити акаунт" }).click();
+  await page.locator('a[href="/tasks"]').click();
+  const columns = page.locator(".board-column");
+  await expect(columns).toHaveCount(3);
+  const first = await columns.nth(0).boundingBox();
+  const second = await columns.nth(1).boundingBox();
+  expect(first).not.toBeNull();
+  expect(second).not.toBeNull();
+  expect(second!.y).toBeGreaterThan(first!.y);
+  await columns
+    .nth(0)
+    .getByRole("button", { name: "＋ Додати завдання" })
+    .click();
+  await expect(
+    columns.nth(0).getByRole("heading", { name: "Нове завдання" }),
+  ).toBeVisible();
+});

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useProjectsStore } from '~/stores/projects'
-const store = useProjectsStore()
-onMounted(() => store.loadProjects())
+import { useProjectsStore } from "~/stores/projects";
+const store = useProjectsStore();
+onMounted(() => store.loadProjects());
 </script>
 
 <template>

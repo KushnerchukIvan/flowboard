@@ -9,6 +9,7 @@
     "preview": "nuxt preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "format": "prettier --write \"app.vue\" \"pages/**/*.vue\" \"components/**/*.vue\" \"middleware/**/*.ts\" \"server/**/*.ts\" \"stores/**/*.ts\" \"types/**/*.ts\" \"assets/**/*.{css,scss}\" \"tests/**/*.ts\" \"*.{ts,mjs,json}\"",
     "e2e": "cypress run",
     "e2e:playwright": "playwright test",
     "postinstall": "nuxt prepare"
@@ -32,6 +33,7 @@
     "@vue/test-utils": "^2.4.6",
     "cypress": "^14.5.0",
     "jsdom": "^26.1.0",
+    "prettier": "^3.9.9",
     "sass": "^1.89.2",
     "sass-embedded": "^1.105.0",
     "vitest": "^3.2.4"
