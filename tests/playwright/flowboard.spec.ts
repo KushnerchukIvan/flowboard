@@ -15,7 +15,7 @@ test('registration, dashboard actions, project details, tasks, dialogs, search a
   await page.getByLabel('Пароль').fill('Secure-demo-123')
   await page.getByRole('button', { name: 'Створити акаунт' }).click()
   await expect(page).toHaveURL('/')
-  await expect(page.getByRole('heading', { name: 'Доброго ранку, Анно' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Доброго ранку, Playwright User' })).toBeVisible()
   const activityChart = page.getByLabel('Період активності')
   await expect(page.locator('.chart-bar')).toHaveCount(30)
   await page.locator('.chart-bar').first().hover()
@@ -133,7 +133,7 @@ test('registration, dashboard actions, project details, tasks, dialogs, search a
   await expect(page).toHaveURL('/')
   await page.reload()
   await expect(page).toHaveURL('/')
-  await expect(page.getByRole('heading', { name: 'Доброго ранку, Анно' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Доброго ранку, Playwright User' })).toBeVisible()
   expect(pageErrors).toEqual([])
 })
 
