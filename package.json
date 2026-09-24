@@ -1,0 +1,39 @@
+{
+  "name": "portfolio1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "e2e": "cypress run",
+    "e2e:playwright": "playwright test",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/eslint": "^1.17.0",
+    "@nuxt/image": "^2.1.0",
+    "@pinia/nuxt": "^1.0.2",
+    "eslint": "^10.11.0",
+    "graphql": "^16.14.2",
+    "h3": "^1.15.11",
+    "nitro-graphql": "^1.8.0",
+    "nitropack": "^2.13.4",
+    "nuxt": "^3.21.11",
+    "pinia": "^4.0.3",
+    "vue": "^3.5.40",
+    "vue-router": "^5.2.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@vue/test-utils": "^2.4.6",
+    "cypress": "^14.5.0",
+    "jsdom": "^26.1.0",
+    "sass": "^1.89.2",
+    "sass-embedded": "^1.105.0",
+    "vitest": "^3.2.4"
+  }
+}

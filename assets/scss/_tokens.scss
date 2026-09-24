@@ -1,0 +1,11 @@
+$brand: #7857e8;
+$surface: #ffffff;
+$ink: #25242c;
+$muted: #9695a1;
+
+:root {
+  --brand-color: #{$brand};
+  --surface-color: #{$surface};
+  --ink-color: #{$ink};
+  --muted-color: #{$muted};
+}

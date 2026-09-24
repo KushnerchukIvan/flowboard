@@ -1,0 +1,13 @@
+services:
+  flowboard:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in your .env file}
+    volumes:
+      - flowboard-data:/app/.data
+    restart: unless-stopped
+
+volumes:
+  flowboard-data:
